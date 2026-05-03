@@ -1,1 +1,79 @@
+localStorage.setItems("username", "John");
+const username = localStorage.getItem("username");
+console.log(username);
+localStorage.removeItem("username");
+localStorage.clear();
+if (localStorage.getItem("username")){
+    console.log("User exists");
+} else {
+    console.log("User does not exist");
+}
+
+localStorage.setItem("user", JSON.stringify(user));
+const retrieved = JSON.parse(localStorage.getItem("user"));
+const user = {
+    name: "John",
+    age: "30",
+    hobbies: ["coding", "reading"]
+};
+localStorage.setItem("user", JSON.stringify(user));
+const retrievedUser = JSON.parse(localStorage.getItem("user"));
+console.log(retrievedUser);
+console.log(retrievedUser.hobbies[0]);
+
+function saveToStorage(key, data){
+    localStorage.setItems(key, JSON.stringify(data));
+}
+function getFromStorage(key, defaultValue = null){
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultValue;
+}
+function removeFromStorage(key){
+    localStorage.removeItem(key);
+}
+let notes = [];
+let editId = null;
+const noteTitleInput = document.getElementById('noteTitle');
+const noteContentInput = document.getElementById('noteContent');
+const saveNoteBtn = document.getElementById('saveNoteBtn');
+const notesContainer = document.getElementById('notesContainer');
+function loadNotes(){
+    notes = getFromStorage('notes', []);
+    renderNotes();
+}
+function persistNotes() {
+    saveToStorage('notes');
+}
+function saveNote(){
+    const title = noteTitleInput.value.trim();
+    const content = noteContentInput.value.trim();
+    if (!title && !content){
+        alert('Please enter a title or some content!');
+        return;
+    }
+    if(editId !== null){
+        notes[index] = {
+            ...notes[index],
+            title: title || 'untitled',
+            content: content,
+            updateAt: new Date().toISOString()
+        };
+    }
+    editId = null;
+    saveNoteBtn.textContent = '+ Add Note';
+} else {
+    const note = {
+        id: Date.now(),
+        title: title || 'untitled',
+        content: content,
+        createAt: new Date().toISOString(),
+        updateAt: new Date().toISOString()
+    };
+    notes.unshift(note);
+}
+persistNotes();
+clearForm();
+renderNotes();
+}
+
 
