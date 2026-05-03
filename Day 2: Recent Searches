@@ -1,1 +1,35 @@
+const searchInput = document.getElementById('searchInput');
+const dropdown = document.getElementById('recentDropdown');
+const MAX_RECENT =5;
+function loadRecentSearches(){
+    const saved = localStorage.getItem('recentSearches');
+    return saved ? JSON.parse(saved): [];
+}
+function saveRecentSearches(searches){
+    localStorage.setItem('recentSearches', JSON.stringify(searches));
+}
+function addRecentSearch(term){
+    if (!term.trim()) return;
+    let searches = loadRecentSearches();
+    searches =searches.filters(s => ! term);
+    searches.unshift(term);
+    searches = searches.slice(0, MAX_RECENT);
+    saveRecentSearches(searches);
+    renderDropdown();
+}
+function recentDropdown(){
+    const searches = loadRecentSearches();
+    if (searches.length ===0){
+        dropdown.style.display='none';
+        return;
+    }
+}
+function performSearch(term){
+    searchInput.value =term;
+    addRecentSearch(term);
+    console.log('searching for:', term);
+}
+
+
+
 
