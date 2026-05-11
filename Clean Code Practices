@@ -1,1 +1,146 @@
+const MIN_PASSWORD_LENGTH = 8;
+const HTTP_NOT_FOUND = 404;
+const DISCOUNT_RATE = 0.1;
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
+const currentDate = new Date();
+
+const users = [
+    { name: "Pauline", age: 22 },
+    { name: "John", age: 15 },
+    { name: "Sarah", age: 30 }
+];
+
+const adultUsers = users.filter(user => user.age >= 18);
+
+console.log("Adult Users:", adultUsers);
+
+function calculateDiscount(price, quantity) {
+    return price * quantity * DISCOUNT_RATE;
+}
+
+const totalDiscount = calculateDiscount(1000, 2);
+
+console.log("Discount:", totalDiscount);
+
+function validateUser(userData) {
+
+    if (!userData.email.includes("@")) {
+        throw new Error("Invalid email");
+    }
+
+    if (userData.password.length < MIN_PASSWORD_LENGTH) {
+        throw new Error(
+            `Password must be at least ${MIN_PASSWORD_LENGTH} characters`
+        );
+    }
+
+    if (userData.age < 18) {
+        throw new Error("User must be an adult");
+    }
+
+    return true;
+}
+
+function normalizeUser(userData) {
+
+    return {
+        ...userData,
+        name: userData.name.trim(),
+        email: userData.email.toLowerCase()
+    };
+}
+
+const database = {
+
+    async save(user) {
+
+        return new Promise(resolve => {
+
+            setTimeout(() => {
+
+                console.log("User saved:", user);
+
+                resolve(user);
+
+            }, 1000);
+        });
+    }
+};
+
+const emailService = {
+
+    async sendWelcome(email) {
+
+        return new Promise(resolve => {
+
+            setTimeout(() => {
+
+                console.log(`Welcome email sent to ${email}`);
+
+                resolve();
+
+            }, 1000);
+        });
+    }
+};
+
+async function createUser(userData) {
+
+    validateUser(userData);
+
+    const normalizedUser = normalizeUser(userData);
+
+    await database.save(normalizedUser);
+
+    await emailService.sendWelcome(
+        normalizedUser.email
+    );
+
+    return normalizedUser;
+}
+
+async function handleCreateUser() {
+
+    const userData = {
+        name: "   Pauline Ndugi   ",
+        email: "PAULINE@EMAIL.COM",
+        password: "mypassword123",
+        age: 22
+    };
+
+    try {
+
+        console.log("Creating user...");
+
+        const createdUser = await createUser(userData);
+
+        console.log("Success:", createdUser);
+
+    } catch (error) {
+
+        console.log("Error:", error.message);
+    }
+}
+
+function handleResponse(response) {
+
+    if (response.status === HTTP_NOT_FOUND) {
+
+        console.log("Resource not found");
+
+        return;
+    }
+
+    console.log("Request successful");
+}
+
+setTimeout(() => {
+
+    console.log("This runs after one day");
+
+}, ONE_DAY_MS);
+
+handleCreateUser();
+
+handleResponse({ status: 404 });
