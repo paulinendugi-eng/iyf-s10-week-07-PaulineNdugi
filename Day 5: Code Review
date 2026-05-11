@@ -1,1 +1,46 @@
+Error Handling 
+Add:
+try...catch around async requests
+User-friendly error messages in UI (not just console logs)
+Loading + error states (e.g. “Fetching weather…” / “City not found”)
 
+
+Code Organization
+Improve by splitting into functions:
+fetchWeather(city)
+renderWeather(data)
+showError(message)
+setLoading(state)
+Optional upgrade:
+Separate files: api.js, ui.js, app.js
+
+
+Readability & Maintainability
+Fix:
+Use meaningful names (weatherData, cityInput, apiKey)
+Store constants:
+const BASE_URL = "..."
+const API_KEY = "..."
+
+
+DOM Efficiency
+Improve:
+Cache elements once:
+JavaScript
+const input = document.getElementById("city");
+Batch UI updates instead of multiple .innerHTML changes
+
+
+Async Code Quality
+Improve:
+JavaScript
+if (!response.ok) throw new Error("Network response failed");
+Ensure:
+Proper async flow
+No nested .then() chains (avoid callback-style mess)
+
+
+Debugging & Logging
+Improve:
+Keep logs minimal or remove in production code
+Use structured error logs only when needed
