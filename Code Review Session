@@ -1,1 +1,49 @@
+"use strict";
+const codeReviewSession = {
+    time: "60 minutes",
 
+    peerReviewChecklist: {
+        codeQuality: {
+            meaningfulNames: "Use clear variable and function names",
+            noMagicValues: "Avoid hardcoded numbers/strings",
+            singleResponsibility: "Each function should do one thing",
+            maxNesting: "No deeply nested code (max 3 levels)",
+            noDuplication: "Avoid repeating code"
+        },
+
+        javascript: {
+            constLetOnly: "Use const/let (no var)",
+            errorHandling: "Proper error handling required",
+            noUnusedVariables: "Remove unused variables",
+            strictEquality: "Use === instead of =="
+        },
+
+        dom: {
+            cachedQueries: "Cache DOM queries for efficiency",
+            eventDelegation: "Use event delegation where appropriate",
+            noMemoryLeaks: "Remove unnecessary event listeners"
+        },
+
+        async: {
+            handleErrors: "All async operations must handle errors",
+            loadingStates: "Show loading indicators when needed",
+            noUnhandledPromises: "Avoid unhandled promise rejections"
+        },
+
+        style: {
+            consistentFormatting: "Keep code formatting consistent",
+            properIndentation: "Use proper indentation",
+            meaningfulComments: "Add comments only when necessary"
+        }
+    }
+};
+
+function runCodeReviewSession() {
+    console.log("🔴 Code Review Session Started (60 minutes)");
+    console.log("Step 1: Pair up and exchange projects");
+    console.log("Step 2: Review using checklist");
+    console.log("Step 3: Write feedback");
+    console.log("Step 4: Discuss findings");
+}
+
+runCodeReviewSession();
