@@ -1,1 +1,183 @@
+state.js
+JavaScript
+import { loadTodos } from "./storage.js";
 
+export let todos = loadTodos();
+
+
+utils.js
+JavaScript
+export function generateId() {
+
+    return Date.now().toString(36) +
+        Math.random().toString(36).slice(2);
+}
+
+
+storage.js
+JavaScript
+const STORAGE_KEY = "todos";
+
+export function saveTodos(todos) {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(todos)
+    );
+}
+
+export function loadTodos() {
+
+    const data = localStorage.getItem(STORAGE_KEY);
+
+    return data ? JSON.parse(data) : [];
+}
+
+
+todo.js
+JavaScript
+import { todos } from "./state.js";
+
+import { saveTodos } from "./storage.js";
+
+import { generateId } from "./utils.js";
+
+export function addTodo(text) {
+
+    const newTodo = {
+        id: generateId(),
+        text,
+        completed: false
+    };
+
+    todos.push(newTodo);
+
+    saveTodos(todos);
+}
+
+export function toggleTodo(id) {
+
+    const todo = todos.find(
+        todo => todo.id === id
+    );
+
+    if (todo) {
+
+        todo.completed = !todo.completed;
+
+        saveTodos(todos);
+    }
+}
+
+export function deleteTodo(id) {
+
+    const index = todos.findIndex(
+        todo => todo.id === id
+    );
+
+    if (index !== -1) {
+
+        todos.splice(index, 1);
+
+        saveTodos(todos);
+    }
+}
+
+
+ui.js
+JavaScript
+import { todos } from "./state.js";
+
+import {
+    toggleTodo,
+    deleteTodo
+} from "./todo.js";
+
+
+const todoList = document.getElementById("todo-list");
+
+export function renderTodos() {
+
+    todoList.innerHTML = "";
+
+    todos.forEach(todo => {
+
+        const li = document.createElement("li");
+
+        if (todo.completed) {
+
+            li.classList.add("completed");
+        }
+
+        li.innerHTML = `
+            <span>${todo.text}</span>
+
+            <div>
+                <button class="toggle-btn">
+                    ✓
+                </button>
+
+                <button class="delete-btn">
+                    X
+                </button>
+            </div>
+        `;
+
+        li.querySelector(".toggle-btn")
+            .addEventListener("click", () => {
+
+                toggleTodo(todo.id);
+
+                renderTodos();
+            });
+
+        li.querySelector(".delete-btn")
+            .addEventListener("click", () => {
+
+                deleteTodo(todo.id);
+
+                renderTodos();
+            });
+
+        todoList.appendChild(li);
+    });
+}
+
+
+app.js
+JavaScript
+import { addTodo } from "./todo.js";
+
+import { renderTodos } from "./ui.js";
+
+
+const todoForm = document.getElementById("todo-form");
+
+const todoInput = document.getElementById("todo-input");
+
+function init() {
+
+    renderTodos();
+
+    todoForm.addEventListener(
+        "submit",
+        handleSubmit
+    );
+}
+
+function handleSubmit(event) {
+
+    event.preventDefault();
+
+    const text = todoInput.value.trim();
+
+    if (!text) return;
+
+    addTodo(text);
+
+    renderTodos();
+
+    todoInput.value = "";
+}
+
+init();
