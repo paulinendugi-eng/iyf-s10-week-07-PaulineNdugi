@@ -1,1 +1,44 @@
+const form = document.getElementById("myForm");
+const inputs = form.querySelectorAll("input, textarea, select");
 
+const STORAGE_KEY = "autoSaveFormData";
+
+function loadFormData() {
+    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+    if (!savedData) return;
+
+    inputs.forEach(input => {
+        if (savedData[input.name]) {
+            input.value = savedData[input.name];
+        }
+    });
+}
+
+function saveFormData() {
+    const data = {};
+
+    inputs.forEach(input => {
+        data[input.name] = input.value;
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+setInterval(saveFormData, 5000);
+
+inputs.forEach(input => {
+    input.addEventListener("input", saveFormData);
+});
+
+form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    form.reset();
+
+    console.log("Form submitted and saved data cleared!");
+});
+
+loadFormData();
