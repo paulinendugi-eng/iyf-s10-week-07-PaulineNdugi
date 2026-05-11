@@ -1,1 +1,26 @@
+const form = document.getElementById("contact-form");
+const inputs = form.querySelectorAll("input, textarea");
 
+inputs.forEach((input) => {
+    const savedValue = sessionStorage.getItem(`form_${input.name}`);
+
+    if (savedValue !== null) {
+        input.value = savedValue;
+    }
+
+    input.addEventListener("input", () => {
+        sessionStorage.setItem(`form_${input.name}`, input.value);
+    });
+});
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault(); // prevents page refresh (important for testing)
+
+    inputs.forEach((input) => {
+        sessionStorage.removeItem(`form_${input.name}`);
+    });
+
+    form.reset(); // clears form UI after submission
+
+    console.log("Form submitted and sessionStorage cleared");
+});
