@@ -1,1 +1,39 @@
+.eslintrc.json
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-unused-vars": "warn",
+        "no-console": "off",
+        "eqeqeq": "error",
+        "curly": "error",
+        "prefer-const": "warn"
+    }
+}
 
+
+.prettierrc
+{
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "printWidth": 80
+}
+
+
+package.json scripts
+{
+    "scripts": {
+        "lint": "eslint src/",
+        "lint:fix": "eslint src/ --fix",
+        "format": "prettier --write src/"
+    }
+}
